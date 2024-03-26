@@ -135,7 +135,7 @@ export class SpotifyApi {
     public switchAuthenticationStrategy(authentication: IAuthStrategy) {
         this.authenticationStrategy = authentication;
         this.authenticationStrategy.setConfiguration(this.sdkConfig);
-        this.authenticationStrategy.getOrCreateAccessToken(); // trigger any redirects 
+        this.authenticationStrategy.getOrCreateAccessToken(); // trigger any redirects
     }
 
     /**
@@ -148,6 +148,21 @@ export class SpotifyApi {
             authenticated: response.expires! > Date.now() && !isEmptyAccessToken(response),
             accessToken: response
         };
+    }
+
+    public async authenticateWithState(state: string) {
+        let response;
+        if (this.authenticationStrategy instanceof ImplicitGrantStrategy) {
+            response = await this.authenticationStrategy.getOrCreateAccessTokenWithState(state); // trigger any redirects
+        } else {
+            response = await this.authenticationStrategy.getOrCreateAccessToken(); // trigger any redirects
+        }
+
+        return {
+            authenticated: response?.expires! > Date.now() && !isEmptyAccessToken(response),
+            accessToken: response
+        };
+
     }
 
     /**
