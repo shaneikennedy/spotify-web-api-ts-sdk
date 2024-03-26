@@ -16,7 +16,8 @@
     "build:win": "npm run build:cjs-win && npm run build:mjs-win",
     "build:mjs-win": "tsc --project tsconfig.mjs.json && xcopy .\\res\\package.mjs.json .\\dist\\mjs\\package.json /-I /Y",
     "build:cjs-win": "tsc --project tsconfig.cjs.json && xcopy .\\res\\package.cjs.json .\\dist\\cjs\\package.json /-I /Y",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "npm run build:cjs && npm run build:mjs"
   },
   "exports": {
     "import": "./dist/mjs/index.js",
