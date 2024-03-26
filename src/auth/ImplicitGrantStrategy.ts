@@ -40,19 +40,19 @@ export default class ImplicitGrantStrategy implements IAuthStrategy {
   public async getOrCreateAccessTokenWithState(
     state: string,
   ): Promise<AccessToken> {
-    const token = await this.cache.getOrCreate<AccessToken>(
-      ImplicitGrantStrategy.cacheKey,
-      async () => {
-        const token = await this.redirectOrVerifyTokenWithState(state);
-        return AccessTokenHelpers.toCachable(token);
-      },
-      async (expiring) => {
-        return AccessTokenHelpers.refreshCachedAccessToken(
-          this.clientId,
-          expiring,
-        );
-      },
-    );
+    const token = await this.redirectOrVerifyTokenWithState(state);
+    // const token = await this.cache.getOrCreate<AccessToken>(
+    //   ImplicitGrantStrategy.cacheKey,
+    //   async () => {
+    //     return AccessTokenHelpers.toCachable(token);
+    //   },
+    //   async (expiring) => {
+    //     return AccessTokenHelpers.refreshCachedAccessToken(
+    //       this.clientId,
+    //       expiring,
+    //     );
+    //   },
+    // );
 
     return token;
   }
